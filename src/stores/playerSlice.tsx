@@ -10,7 +10,6 @@ export interface PlayerSlice {
 		status: Status;
 	};
 	setPlayer: (player: PlayerSlice['player']) => void;
-	// setPlayer: (player: { name: string; id: string; score: number; status: Status }) => void;
 }
 
 export const createPlayerSlice: StateCreator<PlayerSlice> = (set) => ({
