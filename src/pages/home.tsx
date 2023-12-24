@@ -11,7 +11,6 @@ export const Home = () => {
 				Anwser the questions to see how well you know the bride. The person with the most correct answer
 				wins !
 			</Text>
-
 			<Button asChild variant='link' className='mt-8'>
 				<Link to='/register'>Commencer</Link>
 			</Button>
