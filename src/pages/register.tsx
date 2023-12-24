@@ -15,15 +15,12 @@ export const Register = () => {
 
 	const debounceName = useDebounceValue(userName);
 
-	const [playerLocalStorage, setPlayerLocalPlayer] = useLocalStorage<PlayerSlice['player']>(
-		'game-storage',
-		{
-			name: '',
-			id: '',
-			score: 0,
-			status: 'pending'
-		}
-	);
+	const [, setPlayerLocalPlayer] = useLocalStorage<PlayerSlice['player']>('game-storage', {
+		name: '',
+		id: '',
+		score: 0,
+		status: 'pending'
+	});
 
 	const handleRegisterUser = () => {
 		if (debounceName.length <= 0) return;

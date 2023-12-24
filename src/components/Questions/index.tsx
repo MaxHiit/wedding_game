@@ -25,15 +25,12 @@ export const Questions = () => {
 
 	const playerCollectionRef = collection(db, 'players');
 
-	const [playerLocalStorage, setPlayerLocalPlayer] = useLocalStorage<PlayerSlice['player']>(
-		'game-storage',
-		{
-			name: '',
-			id: '',
-			score: 0,
-			status: 'pending'
-		}
-	);
+	const [, setPlayerLocalPlayer] = useLocalStorage<PlayerSlice['player']>('game-storage', {
+		name: '',
+		id: '',
+		score: 0,
+		status: 'pending'
+	});
 
 	const quizLength = QUIZ_DATA.length;
 	const quizs = useMemo(() => [...QUIZ_DATA], []);
@@ -70,7 +67,6 @@ export const Questions = () => {
 		}
 
 		if (quizIndex + 1 === quizLength) {
-			setQuizIndex(0);
 			endGame(countdown);
 			return;
 		}
