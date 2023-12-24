@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import type { HTMLAttributes, ReactNode } from 'react';
+import type { ElementType, ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
@@ -37,17 +37,13 @@ const textVariants = cva('text-center', {
 	}
 });
 
-type TextTags = 'p' | 'span';
-
-export interface TextProps<T extends HTMLElement>
-	extends HTMLAttributes<T>,
-		VariantProps<typeof textVariants> {
-	as?: TextTags;
+export interface TextProps<T extends ElementType> extends VariantProps<typeof textVariants> {
+	as?: T;
 	children: ReactNode;
 	className?: string;
 }
 
-export const Text = forwardRef<HTMLElement | null, TextProps<HTMLElement>>(
+export const Text = forwardRef<ElementType, TextProps<ElementType>>(
 	({ as = 'span', children, className, variant, size, weight, ...restProps }, ref) => {
 		const Comp = as;
 
