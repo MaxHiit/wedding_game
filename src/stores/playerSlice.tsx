@@ -1,18 +1,16 @@
 import { StateCreator } from 'zustand';
 
-type Status = 'pending' | 'completed';
-
 export interface PlayerSlice {
 	player: {
-		name: string;
+		firstname: string;
+		lastname: string;
 		id: string;
 		score: number;
-		status: Status;
 	};
 	setPlayer: (player: PlayerSlice['player']) => void;
 }
 
 export const createPlayerSlice: StateCreator<PlayerSlice> = (set) => ({
-	player: { name: '', id: '', score: 0, status: 'pending' },
+	player: { firstname: '', lastname: '', id: '', score: 0 },
 	setPlayer: (player) => set(() => ({ player }))
 });
