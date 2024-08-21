@@ -20,7 +20,7 @@ const config = {
 		extend: {
 			fontFamily: {
 				title: ['var(--font-bodar)'],
-				body: ['var(--font-sfui']
+				body: ['var(--font-sfui)']
 			},
 			colors: {
 				border: 'hsl(var(--border))',
