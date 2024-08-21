@@ -27,8 +27,14 @@ model QuizResult {
   id             String   @id @default(uuid()) @map("_id")
   user           User     @relation(fields: [userId], references: [id])
   userId         String   @unique
-  score          Int
+  status         Status   @default(IN_PROGRESS)
+  scoreTime      Int      @default(0)
   correctAnswers Int
   wrongAnswers   Int
   createdAt      DateTime @default(now())
+}
+
+enum Status {
+  IN_PROGRESS
+  COMPLETE
 }
