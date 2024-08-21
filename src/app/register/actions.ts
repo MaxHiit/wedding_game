@@ -1,8 +1,7 @@
 'use server';
 
-import { registerUserUseCase } from '@/use-cases/user';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import prisma from '@/lib/prisma';
+import { createSession } from '@/lib/session';
 import { z } from 'zod';
 import { createServerAction } from 'zsa';
 
@@ -14,13 +13,42 @@ export const registerAction = createServerAction()
 		})
 	)
 	.handler(async ({ input }) => {
-		const currentUser = await registerUserUseCase(
-			input.firstname.toLowerCase(),
-			input.lastname.toLowerCase()
-		);
+		const firstname = input.firstname.toLowerCase();
+		const lastname = input.lastname.toLowerCase();
 
-		const oneDay = 24 * 60 * 60 * 1000;
-		cookies().set('userToken', currentUser.id, { expires: Date.now() + oneDay });
+		// Check if the user's name already exists
+		const existingUser = await prisma.user.findFirst({
+			where: { firstname, lastname }
+		});
 
-		return redirect('/rules');
+		if (existingUser) {
+			throw new Error('An user with that name already exists, please use a different name.');
+		}
+
+		// Insert the user into the database
+		const user = await prisma.user.create({
+			data: {
+				firstname,
+				lastname
+			}
+		});
+
+		if (!user) {
+			throw new Error('An error occurred while creating your account.');
+		}
+
+		// Initialize quiz
+		await prisma.quizResult.create({
+			data: {
+				userId: user.id,
+				scoreTime: 0,
+				correctAnswers: 0,
+				wrongAnswers: 0
+			}
+		});
+
+		// Create a session for the user
+		const userId = user.id;
+
+		await createSession(userId);
 	});

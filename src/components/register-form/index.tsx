@@ -1,70 +1,101 @@
 'use client';
 
-import { PlayerSlice } from '@/stores/playerSlice';
-import { useGameStore } from '@/stores/useGameStore';
+import { registerAction } from '@/app/register/actions';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage
+} from '@/components/ui/form';
 
-import { Input } from '@/components/input';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useDebounce } from 'react-use';
-import { v4 as uuidv4 } from 'uuid';
+import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { AlertCircle } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { useServerAction } from 'zsa-react';
 
-const RegisterForm = () => {
-	const router = useRouter();
-	const { player, setPlayer } = useGameStore((state) => state);
+const registrationSchema = z.object({
+	firstname: z
+		.string()
+		.min(2, { message: 'Must be as least 2 character' })
+		.max(255, { message: 'Must contain a maximum of 225 character' }),
+	lastname: z
+		.string()
+		.min(2, { message: 'Must be as least 2 character' })
+		.max(255, { message: 'Must contain a maximum of 225 character' })
+});
 
-	const [firstname, setFirstName] = useState(player.firstname);
-	const [lastname, setLastName] = useState(player.lastname);
-	const [debounceFirstname, setDebounceFirstName] = useState('');
-	const [debounceLastname, setDebounceLastName] = useState('');
+export const RegisterForm = () => {
+	const { execute, isPending, error } = useServerAction(registerAction, {
+		onError({ err }) {
+			console.log(err);
+		}
+	});
 
-	const [, cancel] = useDebounce(
-		() => {
-			setDebounceFirstName(firstname);
-			setDebounceLastName(lastname);
-		},
-		250,
-		[firstname, lastname]
-	);
+	const form = useForm<z.infer<typeof registrationSchema>>({
+		resolver: zodResolver(registrationSchema),
+		defaultValues: {
+			firstname: '',
+			lastname: ''
+		}
+	});
 
-	const handleRegister = () => {
-		if (debounceFirstname.length === 0 || debounceLastname.length === 0) return;
-
-		const userId = player.id ? player.id : uuidv4();
-
-		const newPlayer: PlayerSlice['player'] = {
-			firstname: firstname,
-			lastname: lastname,
-			id: userId,
-			score: 0
-		};
-
-		setPlayer(newPlayer);
-		router.push('/quiz/rules');
+	const onSubmit = (values: z.infer<typeof registrationSchema>) => {
+		execute(values);
 	};
 
 	return (
-		<div className='flex flex-col space-y-8 w-60'>
-			<Input
-				type='text'
-				value={firstname}
-				maxLength={256}
-				required
-				onChange={(e) => setFirstName(e.target.value.toLowerCase())}
-				placeholder='Prénom'
-			/>
-			<Input
-				type='text'
-				value={lastname}
-				maxLength={256}
-				required
-				onChange={(e) => setLastName(e.target.value.toLowerCase())}
-				placeholder='Nom'
-			/>
+		<Form {...form}>
+			<form onSubmit={form.handleSubmit(onSubmit)} className='w-full h-full mt-8 flex flex-col flex-1'>
+				<FormField
+					control={form.control}
+					name='firstname'
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel className='sr-only'>Firstname</FormLabel>
+							<FormControl>
+								<Input {...field} className='w-full text-center' placeholder='prénom' type='text' />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name='lastname'
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel className='sr-only'>Lastname</FormLabel>
+							<FormControl>
+								<Input {...field} className='w-full text-center' placeholder='nom' type='text' />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
 
-			<button onClick={handleRegister}>Suivant</button>
-		</div>
+				{error && (
+					<Alert variant='destructive' className='mt-6'>
+						<AlertCircle className='h-4 w-4' />
+						<AlertTitle>Error</AlertTitle>
+						<AlertDescription>{error.message}</AlertDescription>
+					</Alert>
+				)}
+
+				<Button
+					disabled={isPending}
+					variant='link'
+					type='submit'
+					className='w-full font-title text-2xl underline-offset hover:underline mt-auto'
+				>
+					Register
+				</Button>
+			</form>
+		</Form>
 	);
 };
-
-export default RegisterForm;
