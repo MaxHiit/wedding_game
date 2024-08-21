@@ -1,23 +1,30 @@
-'use client';
-
 import { Title } from '@/components/title';
+import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
-export default function Home() {
+export default async function Home() {
 	return (
-		<main className='flex flex-col items-center justify-between p-24'>
-			<Title>Do You know the bride</Title>
-			<p className='mt-8 text-center'>
-				Anwser the questions to see how well you know the bride. The person with the most correct answer
-				wins !
+		<main className='flex flex-col items-center p-4 pt-20 max-w-3xl m-auto h-full'>
+			<Title>Connaissez-vous bien la mariée ?</Title>
+			<p className='font-body text-1xl mt-8 text-center'>
+				Répondez aux questions pour voir à quel point vous connaissez bien la mariée. La personne avec
+				le plus de bonnes réponses gagne !
 			</p>
-			<div className='mt-8 flex gap-4'>
-				<Link href='/register' className=' text-2xl underline-offset hover:underline'>
-					Jouer
-				</Link>
-				<Link href='/leaderboard' className='text-2xl underline-offset hover:underline'>
-					Leaderboard
-				</Link>
+			<div className='flex flex-wrap gap-4 mt-auto'>
+				<Button
+					asChild
+					variant='link'
+					className='flex-1 font-title text-2xl underline-offset hover:underline'
+				>
+					<Link href='/register'>Jouer</Link>
+				</Button>
+				<Button
+					asChild
+					variant='link'
+					className='flex-1 font-title text-2xl underline-offset hover:underline'
+				>
+					<Link href='/leaderboard'>Leaderboard</Link>
+				</Button>
 			</div>
 		</main>
 	);
