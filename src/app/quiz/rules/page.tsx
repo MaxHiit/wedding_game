@@ -5,16 +5,24 @@ import Link from 'next/link';
 
 export default function RulesPage() {
 	return (
-		<main className='flex flex-col items-center justify-between max-w-[1000px] w-full mx-auto space-y-8'>
+		<>
 			<Title>Regle du jeu</Title>
-			<div className='flex flex-col gap-5 my-8 text-center'>
+			<div className='space-y-4 mt-8'>
+				<p className='font-body text-1xl text-center'>{}</p>
 				{RULES_DATA.map((rule) => (
-					<p key={rule}>{rule}</p>
+					<p key={rule} className='font-body text-1xl  text-center'>
+						{rule}
+					</p>
 				))}
 			</div>
-			<Button asChild variant='link'>
+
+			<Button
+				asChild
+				variant='link'
+				className='font-title text-2xl mt-auto underline-offset hover:underline'
+			>
 				<Link href='/quiz'>Play</Link>
 			</Button>
-		</main>
+		</>
 	);
 }
