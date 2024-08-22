@@ -1,6 +1,5 @@
 'use client';
 import clsx from 'clsx';
-import { motion } from 'framer-motion';
 import { forwardRef, HTMLAttributes, ReactNode } from 'react';
 
 type HeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -16,7 +15,11 @@ export const Title = forwardRef<HTMLHeadingElement, TextProps>(
 		const Comp = as;
 
 		return (
-			<Comp className={clsx('font-title uppercase text-3xl', className)} ref={ref} {...restProps}>
+			<Comp
+				className={clsx('font-title uppercase text-2xl md:text-5xl text-center', className)}
+				ref={ref}
+				{...restProps}
+			>
 				{children}
 			</Comp>
 		);
@@ -24,5 +27,3 @@ export const Title = forwardRef<HTMLHeadingElement, TextProps>(
 );
 
 Title.displayName = 'Title';
-
-export const MotionTitle = motion(Title);

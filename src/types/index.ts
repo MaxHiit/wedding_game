@@ -1,7 +1,17 @@
 export type Quiz = {
 	question: string;
-	answers: string[];
+	options: string[];
+	countdown: number;
 	answer: string;
 };
 
-export type QuizStep = 'rules' | 'questions';
+export type User = {
+	id: string;
+	firstname: string;
+	lastname: string;
+};
+
+export type SessionPayload = {
+	userId: string;
+	// expires: Date;
+};
