@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import { QuizResult, User } from '@prisma/client';
 import 'server-only';
 
 export const getLeaderboard = async () => {
@@ -8,4 +9,8 @@ export const getLeaderboard = async () => {
 	});
 
 	return quizs;
+};
+
+export type QuizResultWithUser = QuizResult & {
+	user: User;
 };

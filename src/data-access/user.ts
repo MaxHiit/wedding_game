@@ -15,8 +15,6 @@ export const getUser = cache(async () => {
 			include: { quizResults: true }
 		});
 
-		console.log(user);
-
 		return user;
 	} catch (error) {
 		console.log('Failed to fetch user');

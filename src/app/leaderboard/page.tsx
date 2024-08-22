@@ -1,10 +1,10 @@
 import LeaderboardCard from '@/components/leaderboard-card';
 import { LeaderboardTopCard } from '@/components/leaderboard-top-card';
 import { Title } from '@/components/title';
-import { getLeaderboard } from '@/data-access/leaderboard';
+import { getLeaderboard, QuizResultWithUser } from '@/data-access/leaderboard';
 
 export default async function LeaderboardPage() {
-	const quizs = await getLeaderboard();
+	const quizs: QuizResultWithUser[] = await getLeaderboard();
 
 	const first = quizs[0];
 	const second = quizs[1];
