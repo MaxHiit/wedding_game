@@ -12,11 +12,6 @@ export default async function LeaderboardPage() {
 	const second = quizs[1];
 	const third = quizs[2];
 
-	console.log('First quiz:', first);
-	console.log('Second quiz:', second);
-	console.log('Third quiz:', third);
-	console.log('All quizs:', quizs);
-
 	if (quizs.length === 0) {
 		return (
 			<main className='flex flex-col items-center p-4 pt-20 max-w-screen-md w-full mx-auto'>
