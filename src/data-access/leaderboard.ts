@@ -8,6 +8,9 @@ export type QuizResultWithUser = Prisma.QuizResultGetPayload<{
 
 export const getLeaderboard = async (): Promise<QuizResultWithUser[]> => {
 	const quizs = await prisma.quizResult.findMany({
+		where: {
+			userId: { not: undefined }
+		},
 		orderBy: [{ correctAnswers: 'desc' }, { scoreTime: 'asc' }],
 		include: { user: true }
 	});
