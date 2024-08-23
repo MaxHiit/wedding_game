@@ -1,6 +1,5 @@
 import prisma from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
-import { revalidatePath } from 'next/cache';
 import 'server-only';
 
 export type QuizResultWithUser = Prisma.QuizResultGetPayload<{
@@ -13,11 +12,6 @@ export const getLeaderboard = async (): Promise<QuizResultWithUser[]> => {
 			orderBy: [{ correctAnswers: 'desc' }, { scoreTime: 'asc' }],
 			include: { user: true } // Assurez-vous d'inclure l'utilisateur
 		});
-
-		// Vérifiez si les résultats contiennent des utilisateurs associés
-		console.log(quizs); // Ajoutez des logs pour déboguer
-
-		revalidatePath('/leaderbooard');
 
 		return quizs;
 	} catch (error) {

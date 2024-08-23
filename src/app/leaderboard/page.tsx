@@ -2,8 +2,10 @@ import LeaderboardCard from '@/components/leaderboard-card';
 import { LeaderboardTopCard } from '@/components/leaderboard-top-card';
 import { Title } from '@/components/title';
 import { getLeaderboard } from '@/data-access/leaderboard';
+import { unstable_noStore as noStore } from 'next/cache';
 
 export default async function LeaderboardPage() {
+	noStore();
 	const quizs = await getLeaderboard();
 
 	const first = quizs[0];
