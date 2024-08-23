@@ -25,7 +25,7 @@ model User {
 
 model QuizResult {
   id             String   @id @default(uuid()) @map("_id")
-  user           User     @relation(fields: [userId], references: [id])
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         String   @unique
   status         Status   @default(IN_PROGRESS)
   scoreTime      Int      @default(0)
