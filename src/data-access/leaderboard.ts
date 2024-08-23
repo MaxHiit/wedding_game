@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
 import 'server-only';
 
 export type QuizResultWithUser = Prisma.QuizResultGetPayload<{
@@ -7,13 +8,20 @@ export type QuizResultWithUser = Prisma.QuizResultGetPayload<{
 }>;
 
 export const getLeaderboard = async (): Promise<QuizResultWithUser[]> => {
-	const quizs = await prisma.quizResult.findMany({
-		where: {
-			userId: { not: undefined }
-		},
-		orderBy: [{ correctAnswers: 'desc' }, { scoreTime: 'asc' }],
-		include: { user: true }
-	});
+	try {
+		const quizs = await prisma.quizResult.findMany({
+			orderBy: [{ correctAnswers: 'desc' }, { scoreTime: 'asc' }],
+			include: { user: true } // Assurez-vous d'inclure l'utilisateur
+		});
 
-	return quizs;
+		// Vérifiez si les résultats contiennent des utilisateurs associés
+		console.log(quizs); // Ajoutez des logs pour déboguer
+
+		revalidatePath('/leaderbooard');
+
+		return quizs;
+	} catch (error) {
+		console.error('Erreur lors de la récupération des résultats:', error);
+		return [];
+	}
 };
